@@ -1,0 +1,136 @@
+{
+  "@@locale": "en",
+  "appTitle": "Bolt",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "noMemosFound": "No memos found",
+  "tapToAdd": "Tap + to add a new task",
+  "todoHeader": "To Do",
+  "completedHeader": "Completed",
+  "filterAll": "All",
+  "filterToday": "Today",
+  "filterUpcoming": "Upcoming",
+  "filterOverdue": "Overdue",
+  "filterNoDate": "No Date",
+  "filterClear": "Clear Filters",
+  "dateToday": "Today",
+  "dateTomorrow": "Tomorrow",
+  "dateInDays": "In {days} days",
+  "dateDaysAgo": "{days}d ago",
+
+  "settingsTitle": "Settings",
+  "sectionNotionSync": "Notion Sync",
+  "sectionAccount": "Account",
+  "labelDatabase": "Database",
+  "msgSelectDatabase": "Select a database",
+  "labelConfigureProperties": "Configure Properties",
+  "btnConnectNotion": "Connect Notion",
+  "btnLogout": "Logout",
+  "dialogLogoutTitle": "Logout",
+  "dialogLogoutContent": "Are you sure you want to logout?",
+  "dialogCancel": "Cancel",
+  "dialogLogoutAction": "Logout",
+  "msgLogoutSuccess": "Logged out successfully",
+  "labelVersion": "Version",
+
+  "addTaskTitle": "New Task",
+  "addTaskHint": "Enter a new task...",
+  "dateToday": "Today",
+  "dateTomorrow": "Tomorrow",
+  "dateInDays": "In {days} days",
+  "@dateInDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "dateDaysAgo": "{days}d ago",
+  "@dateDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "msgNoDatabaseSelected": "No database selected.",
+  "btnCreateTask": "Create Task",
+  "msgTaskAdded": "Task added to Notion!",
+  "msgTaskFailed": "Failed to add task: {error}",
+  "@msgTaskFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "labelSelectDate": "Select Date",
+  "labelName": "Name",
+  "hintWhatNeedsToBeDone": "What needs to be done?",
+  "labelType": "Type",
+  "labelNoType": "No Type",
+  "labelDueDate": "Due Date",
+  "btnAdd": "Add",
+  
+  "mappingTitle": "Property Mapping",
+  "mappingSubtitle": "Configure how Bolt maps Notion properties",
+  "mappingSave": "Save",
+  "mappingSuccess": "Mapping saved",
+
+  "dbSelectionTitle": "Select Database",
+  "dbSelectionEmpty": "No accessible databases found. Please check your Notion integration settings.",
+  "msgDatabaseSelected": "Selected {database}",
+  "@msgDatabaseSelected": {
+    "placeholders": {
+      "database": {
+        "type": "String"
+      }
+    }
+  },
+  "tooltipRefresh": "Refresh Properties",
+  "msgFailedToLoadProperties": "Failed to load properties",
+  "btnRetry": "Retry",
+  "sectionCoreProperties": "Core Task Properties",
+  "sectionAutomationProperties": "Automation Properties",
+  "btnSaveConfiguration": "Save Configuration",
+  "msgConfigurationSaved": "Configuration saved",
+  "msgErrorLoadingProperties": "Error loading properties: {error}",
+  "@msgErrorLoadingProperties": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "propTaskTitle": "Task Title (Required)",
+  "propStatus": "Status",
+  "propDueDate": "Due Date",
+  "propType": "Type / Category",
+  "propName": "Name (Optional)",
+  "propDoneCheckbox": "Done Checkbox",
+  "propDoneDate": "Done Date",
+  "propCreatedDate": "Created Date",
+  "msgLaunchAuthUrlFailed": "Could not launch Notion Auth URL",
+  "msgError": "Error: {error}",
+  "@msgError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "actionDelete": "Delete",
+  "actionUndo": "Undo",
+  "dialogDeleteTaskTitle": "Delete Task",
+  "dialogDeleteTaskContent": "Are you sure you want to delete this task?",
+  "msgTaskDeleted": "Task deleted",
+  "msgDeleteFailed": "Failed to delete task: {error}",
+  "@msgDeleteFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
+}
