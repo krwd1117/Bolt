@@ -1,5 +1,6 @@
 import 'package:bolt/features/auth/presentation/login_screen.dart';
 import 'package:bolt/features/memo/presentation/memo_screen.dart';
+import 'package:bolt/features/settings/presentation/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -39,4 +40,13 @@ class CallbackRoute extends GoRouteData with $CallbackRoute {
     }
     return const LoginScreen();
   }
+}
+
+@TypedGoRoute<SettingsRoute>(path: '/settings')
+class SettingsRoute extends GoRouteData with $SettingsRoute {
+  const SettingsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const SettingsScreen();
 }

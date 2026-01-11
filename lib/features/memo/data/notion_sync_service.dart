@@ -75,7 +75,7 @@ class NotionSyncService {
       }
     } catch (e) {
       print('Import failed: $e');
-      throw e; // Rethrow to let UI show error
+      rethrow; // Rethrow to let UI show error
     }
   }
 }

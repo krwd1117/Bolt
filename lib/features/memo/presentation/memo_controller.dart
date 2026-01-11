@@ -1,8 +1,9 @@
 import 'package:bolt/features/memo/data/database/tables.dart';
+
 import 'package:bolt/features/memo/data/notion/notion_repository.dart';
 import 'package:bolt/features/memo/domain/memo.dart';
 import 'package:bolt/features/settings/presentation/settings_controller.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'memo_controller.g.dart';
@@ -194,16 +195,36 @@ class MemoController extends _$MemoController {
     }
   }
 
+  Future<void> undoDeleteTask(Memo memo) async {
+    if (memo.notionPageId == null) return;
+
+    final previousState = state;
+    final currentList = previousState.value ?? [];
+
+    // Optimistic restore: Add it back.
+    // Note: It will be appended to the end of the list until next refresh/sort.
+    state = AsyncData([...currentList, memo]);
+
+    try {
+      final notionRepo = ref.read(notionRepositoryProvider);
+      await notionRepo.restorePage(memo.notionPageId!);
+    } catch (e) {
+      // Revert if failed
+      state = previousState;
+      rethrow;
+    }
+  }
+
   Future<List<Memo>> _fetchMemos(String dbId) async {
     final notionRepo = ref.read(notionRepositoryProvider);
     final settingsNotifier = ref.read(settingsControllerProvider.notifier);
     final mapping = await settingsNotifier.getPropertyMapping(dbId);
-
     final pages = await notionRepo.queryDatabase(dbId);
 
     final doneKey = mapping['done'];
 
     return pages.map((page) {
+      final pageId = page['id'] as String;
       final properties = page['properties'] as Map<String, dynamic>;
       String content = 'Untitled';
       bool isDone = false;
@@ -251,14 +272,14 @@ class MemoController extends _$MemoController {
       }
 
       return Memo(
-        id: (page['id'] as String).hashCode,
+        id: pageId.hashCode,
         content: content,
         createdAt:
             DateTime.tryParse(page['created_time'] ?? '') ?? DateTime.now(),
         status: SyncStatus.synced,
         retryCount: 0,
         targetDbId: dbId,
-        notionPageId: page['id'],
+        notionPageId: pageId,
         isDone: isDone,
         type: type,
         dueDate: dueDate,

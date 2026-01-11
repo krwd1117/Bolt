@@ -106,6 +106,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get addTaskHint => '새로운 작업을 입력하세요...';
 
   @override
+  String dateUntil(String month, String day) {
+    return '$month월 $day일까지';
+  }
+
+  @override
   String get msgNoDatabaseSelected => '선택된 데이터베이스가 없습니다.';
 
   @override
@@ -240,4 +245,28 @@ class AppLocalizationsKo extends AppLocalizations {
   String msgDeleteFailed(String error) {
     return '삭제 실패: $error';
   }
+
+  @override
+  String get calendarToggleTooltip => '달력 토글';
+
+  @override
+  String get filterTodo => '할 일';
+
+  @override
+  String get filterDone => '완료';
+
+  @override
+  String get clearFilters => '필터 초기화';
+
+  @override
+  String get searchHint => '검색...';
+
+  @override
+  String get sortByName => '이름순';
+
+  @override
+  String get sortByDueDateNearest => '마감일 가까운 순';
+
+  @override
+  String get sortByDueDateFarthest => '마감일 먼 순';
 }

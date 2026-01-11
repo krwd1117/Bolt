@@ -33,7 +33,7 @@ final class MemoControllerProvider
   MemoController create() => MemoController();
 }
 
-String _$memoControllerHash() => r'3dfd8e89d8f77d82139ec569aa18571fbb492458';
+String _$memoControllerHash() => r'0a48ebfd0148a018ca09bc9713382df1162bfeb1';
 
 abstract class _$MemoController extends $AsyncNotifier<List<Memo>> {
   FutureOr<List<Memo>> build();

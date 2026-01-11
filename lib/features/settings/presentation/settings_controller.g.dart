@@ -34,7 +34,7 @@ final class SettingsControllerProvider
 }
 
 String _$settingsControllerHash() =>
-    r'ef325799835ae3e604539cd207b46218d17c0703';
+    r'5dedf6081682a39c4b3237ba19de04139584a9e8';
 
 abstract class _$SettingsController
     extends $AsyncNotifier<List<NotionDatabase>> {

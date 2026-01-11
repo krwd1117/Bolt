@@ -6,7 +6,12 @@ part of 'routes.dart';
 // GoRouterGenerator
 // **************************************************************************
 
-List<RouteBase> get $appRoutes => [$memoRoute, $loginRoute, $callbackRoute];
+List<RouteBase> get $appRoutes => [
+  $memoRoute,
+  $loginRoute,
+  $callbackRoute,
+  $settingsRoute,
+];
 
 RouteBase get $memoRoute =>
     GoRouteData.$route(path: '/', factory: $MemoRoute._fromState);
@@ -68,6 +73,29 @@ mixin $CallbackRoute on GoRouteData {
     '/callback',
     queryParams: {if (_self.code != null) 'code': _self.code},
   );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $settingsRoute =>
+    GoRouteData.$route(path: '/settings', factory: $SettingsRoute._fromState);
+
+mixin $SettingsRoute on GoRouteData {
+  static SettingsRoute _fromState(GoRouterState state) => const SettingsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings');
 
   @override
   void go(BuildContext context) => context.go(location);

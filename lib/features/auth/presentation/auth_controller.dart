@@ -17,8 +17,8 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> launchAuthFlow() async {
-    final repo = ref.read(authRepositoryProvider);
-    final url = repo.getAuthorizationUrl();
+    // final repo = ref.read(authRepositoryProvider);
+    // final url = repo.getAuthorizationUrl(); // Unused
     // Use url_launcher to open this URL
     // We can't directly call launchUrl here as it requires a UI context or platform channel,
     // although url_launcher works from logic if configured.

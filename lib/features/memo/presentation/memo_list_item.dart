@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:bolt/features/memo/data/database/tables.dart';
 import 'package:bolt/features/memo/domain/memo.dart';
 import 'package:flutter/material.dart';
 import 'package:bolt/l10n/generated/app_localizations.dart';
 
-class MemoListItem extends StatelessWidget {
+class MemoListItem extends StatefulWidget {
   final Memo memo;
   final Function(Memo) onToggle;
   final VoidCallback? onLongPress;
@@ -16,12 +18,57 @@ class MemoListItem extends StatelessWidget {
   });
 
   @override
+  State<MemoListItem> createState() => _MemoListItemState();
+}
+
+class _MemoListItemState extends State<MemoListItem> {
+  late bool _isDone;
+  Timer? _debounceTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _isDone = widget.memo.isDone;
+  }
+
+  @override
+  void didUpdateWidget(MemoListItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.memo.isDone != oldWidget.memo.isDone) {
+      if (_debounceTimer?.isActive ?? false) {
+        _debounceTimer!.cancel();
+      }
+      _isDone = widget.memo.isDone;
+    }
+  }
+
+  @override
+  void dispose() {
+    _debounceTimer?.cancel();
+    super.dispose();
+  }
+
+  void _handleToggle() {
+    setState(() {
+      _isDone = !_isDone;
+    });
+
+    _debounceTimer?.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      if (_isDone != widget.memo.isDone) {
+        widget.onToggle(widget.memo);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final isDone = memo.isDone;
 
-    // Subtle varying background for visual interest (optional, sticking to cardColor for consistency)
+    // Use local state _isDone for UI rendering
+    final isDone = _isDone;
+
     final backgroundColor = theme.cardColor;
 
     return Container(
@@ -31,13 +78,13 @@ class MemoListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
         border: Border.all(
-          color: theme.dividerColor.withOpacity(0.05),
+          color: theme.dividerColor.withValues(alpha: 0.05),
           width: 1,
         ),
       ),
@@ -45,21 +92,16 @@ class MemoListItem extends StatelessWidget {
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
-          onTap: () {
-            // TODO: Navigate to detail/edit screen
-          },
-          onLongPress: onLongPress,
+          onTap: _handleToggle,
+          onLongPress: widget.onLongPress,
           borderRadius: BorderRadius.circular(20),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // Custom Checkbox Area
-                Padding(
-                  padding: const EdgeInsets.only(top: 2),
-                  child: _buildCustomCheckbox(context, isDone),
-                ),
+                _buildCustomCheckbox(context, isDone),
                 const SizedBox(width: 16),
 
                 // Content Area
@@ -69,7 +111,7 @@ class MemoListItem extends StatelessWidget {
                     children: [
                       // Title
                       Text(
-                        memo.content,
+                        widget.memo.content,
                         style: theme.textTheme.bodyLarge?.copyWith(
                           fontSize: 16,
                           height: 1.4,
@@ -78,23 +120,27 @@ class MemoListItem extends StatelessWidget {
                               ? TextDecoration.lineThrough
                               : null,
                           decorationColor: theme.colorScheme.onSurface
-                              .withOpacity(0.3),
+                              .withValues(alpha: 0.3),
                           color: isDone
-                              ? theme.colorScheme.onSurface.withOpacity(0.4)
+                              ? theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.4,
+                                )
                               : theme.colorScheme.onSurface,
                         ),
                       ),
 
                       // Metadata Row (Type, Date)
-                      if (memo.type != null || memo.dueDate != null) ...[
+                      if (widget.memo.type != null ||
+                          widget.memo.dueDate != null) ...[
                         const SizedBox(height: 10),
                         Row(
                           children: [
-                            if (memo.type != null) ...[
-                              _buildTag(context, memo.type!),
+                            if (widget.memo.type != null) ...[
+                              _buildTag(context, widget.memo.type!),
                             ],
 
-                            if (memo.type != null && memo.dueDate != null)
+                            if (widget.memo.type != null &&
+                                widget.memo.dueDate != null)
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 6,
@@ -103,14 +149,18 @@ class MemoListItem extends StatelessWidget {
                                   '•',
                                   style: TextStyle(
                                     color: theme.colorScheme.onSurface
-                                        .withOpacity(0.3),
+                                        .withValues(alpha: 0.3),
                                     fontSize: 10,
                                   ),
                                 ),
                               ),
 
-                            if (memo.dueDate != null) ...[
-                              _buildDateBadge(context, memo.dueDate!, l10n),
+                            if (widget.memo.dueDate != null) ...[
+                              _buildDateBadge(
+                                context,
+                                widget.memo.dueDate!,
+                                l10n,
+                              ),
                             ],
                           ],
                         ),
@@ -120,14 +170,14 @@ class MemoListItem extends StatelessWidget {
                 ),
 
                 // Optional: Sync Indicator (Dot)
-                if (memo.status != SyncStatus.synced)
+                if (widget.memo.status != SyncStatus.synced)
                   Container(
                     margin: const EdgeInsets.only(left: 8, top: 4),
                     width: 6,
                     height: 6,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: theme.colorScheme.primary.withOpacity(0.5),
+                      color: theme.colorScheme.primary.withValues(alpha: 0.5),
                     ),
                   ),
               ],
@@ -141,32 +191,26 @@ class MemoListItem extends StatelessWidget {
   Widget _buildCustomCheckbox(BuildContext context, bool isDone) {
     final theme = Theme.of(context);
 
-    return InkWell(
-      onTap: () => onToggle(memo),
-      borderRadius: BorderRadius.circular(12),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        width: 24,
-        height: 24,
-        decoration: BoxDecoration(
-          color: isDone ? theme.colorScheme.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: isDone
-                ? theme.colorScheme.primary
-                : theme.colorScheme.onSurface.withOpacity(0.3),
-            width: 2,
-          ),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.easeInOut,
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        color: isDone ? theme.colorScheme.primary : Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: isDone
+              ? theme.colorScheme.primary
+              : theme.colorScheme.onSurface.withValues(alpha: 0.3),
+          width: 2,
         ),
-        child: isDone
-            ? const Icon(
-                Icons.check_rounded,
-                size: 16,
-                color: Colors
-                    .black, // Primary is yellow, text/icon on it should be black
-              )
-            : null,
+      ),
+      child: AnimatedScale(
+        duration: const Duration(milliseconds: 200),
+        scale: isDone ? 1.0 : 0.0,
+        curve: Curves.easeOutBack,
+        child: const Icon(Icons.check_rounded, size: 16, color: Colors.black),
       ),
     );
   }
@@ -178,7 +222,7 @@ class MemoListItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: theme.dividerColor.withOpacity(0.1)),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.1)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -186,7 +230,7 @@ class MemoListItem extends StatelessWidget {
           Text(
             '#',
             style: TextStyle(
-              color: theme.colorScheme.primary.withOpacity(0.8),
+              color: theme.colorScheme.primary.withValues(alpha: 0.8),
               fontSize: 11,
               fontWeight: FontWeight.bold,
             ),
@@ -195,7 +239,7 @@ class MemoListItem extends StatelessWidget {
           Text(
             type,
             style: theme.textTheme.labelSmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.7),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
               fontWeight: FontWeight.w500,
               fontSize: 11,
             ),
@@ -216,11 +260,12 @@ class MemoListItem extends StatelessWidget {
     final isPast = date.isBefore(
       DateTime(now.year, now.month, now.day),
     ); // Simple check
-    final isUrgent = isPast && !memo.isDone;
+    // However, if we marked it done locally, urgency should disappear visually.
+    final visualIsUrgent = isPast && !_isDone;
 
-    final color = isUrgent
+    final color = visualIsUrgent
         ? theme.colorScheme.error
-        : theme.colorScheme.onSurface.withOpacity(0.6);
+        : theme.colorScheme.onSurface.withValues(alpha: 0.6);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -241,23 +286,28 @@ class MemoListItem extends StatelessWidget {
 
   String _formatDate(DateTime date, AppLocalizations l10n) {
     final now = DateTime.now();
-    final difference = date.difference(now);
-    final days = difference.inDays;
+    final today = DateTime(now.year, now.month, now.day);
+    final targetDate = DateTime(date.year, date.month, date.day);
+    final days = targetDate.difference(today).inDays;
 
-    if (days == 0 && date.day == now.day) {
+    if (days == 0) {
       return l10n.dateToday;
     }
 
-    if (difference.isNegative) {
+    if (days > 0) {
+      // Future
+      if (days == 1) return l10n.dateTomorrow;
+      // "MM.DD" format for other future dates (e.g., "12월 01일까지")
+      return l10n.dateUntil(
+        date.month.toString(),
+        date.day.toString().padLeft(2, '0'),
+      );
+    } else {
       // Past
       final pastDays = days.abs();
       if (pastDays < 7) {
         return l10n.dateDaysAgo(pastDays);
       }
-    } else {
-      // Future
-      if (days == 1) return l10n.dateTomorrow;
-      if (days < 7) return l10n.dateInDays(days);
     }
 
     return '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')}';

@@ -30,7 +30,7 @@ class DatabaseSelectionScreen extends ConsumerWidget {
                   Icon(
                     Icons.storage_outlined,
                     size: 64,
-                    color: theme.colorScheme.onSurface.withOpacity(0.2),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.2),
                   ),
                   const SizedBox(height: 16),
                   Padding(
@@ -39,7 +39,9 @@ class DatabaseSelectionScreen extends ConsumerWidget {
                       l10n.dbSelectionEmpty,
                       textAlign: TextAlign.center,
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.5),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.5,
+                        ),
                       ),
                     ),
                   ),
@@ -91,7 +93,9 @@ class DatabaseSelectionScreen extends ConsumerWidget {
                         child: Text(
                           db.id,
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.5),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.5,
+                            ),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -104,8 +108,8 @@ class DatabaseSelectionScreen extends ConsumerWidget {
                             )
                           : Icon(
                               Icons.circle_outlined,
-                              color: theme.colorScheme.onSurface.withOpacity(
-                                0.3,
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.3,
                               ),
                             ),
                       onTap: () async {

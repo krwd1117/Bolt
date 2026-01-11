@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MemoFilterState {
 
- DateFilter get dateFilter; Set<String> get selectedTypes;
+ DateFilter get dateFilter; StatusFilter get statusFilter; DateTime? get selectedDate;// Custom date filter
+ String get searchQuery; Set<String> get selectedTypes; SortOption get sortOption;
 /// Create a copy of MemoFilterState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +26,16 @@ $MemoFilterStateCopyWith<MemoFilterState> get copyWith => _$MemoFilterStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemoFilterState&&(identical(other.dateFilter, dateFilter) || other.dateFilter == dateFilter)&&const DeepCollectionEquality().equals(other.selectedTypes, selectedTypes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemoFilterState&&(identical(other.dateFilter, dateFilter) || other.dateFilter == dateFilter)&&(identical(other.statusFilter, statusFilter) || other.statusFilter == statusFilter)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&const DeepCollectionEquality().equals(other.selectedTypes, selectedTypes)&&(identical(other.sortOption, sortOption) || other.sortOption == sortOption));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,dateFilter,const DeepCollectionEquality().hash(selectedTypes));
+int get hashCode => Object.hash(runtimeType,dateFilter,statusFilter,selectedDate,searchQuery,const DeepCollectionEquality().hash(selectedTypes),sortOption);
 
 @override
 String toString() {
-  return 'MemoFilterState(dateFilter: $dateFilter, selectedTypes: $selectedTypes)';
+  return 'MemoFilterState(dateFilter: $dateFilter, statusFilter: $statusFilter, selectedDate: $selectedDate, searchQuery: $searchQuery, selectedTypes: $selectedTypes, sortOption: $sortOption)';
 }
 
 
@@ -45,7 +46,7 @@ abstract mixin class $MemoFilterStateCopyWith<$Res>  {
   factory $MemoFilterStateCopyWith(MemoFilterState value, $Res Function(MemoFilterState) _then) = _$MemoFilterStateCopyWithImpl;
 @useResult
 $Res call({
- DateFilter dateFilter, Set<String> selectedTypes
+ DateFilter dateFilter, StatusFilter statusFilter, DateTime? selectedDate, String searchQuery, Set<String> selectedTypes, SortOption sortOption
 });
 
 
@@ -62,11 +63,15 @@ class _$MemoFilterStateCopyWithImpl<$Res>
 
 /// Create a copy of MemoFilterState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? dateFilter = null,Object? selectedTypes = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? dateFilter = null,Object? statusFilter = null,Object? selectedDate = freezed,Object? searchQuery = null,Object? selectedTypes = null,Object? sortOption = null,}) {
   return _then(_self.copyWith(
 dateFilter: null == dateFilter ? _self.dateFilter : dateFilter // ignore: cast_nullable_to_non_nullable
-as DateFilter,selectedTypes: null == selectedTypes ? _self.selectedTypes : selectedTypes // ignore: cast_nullable_to_non_nullable
-as Set<String>,
+as DateFilter,statusFilter: null == statusFilter ? _self.statusFilter : statusFilter // ignore: cast_nullable_to_non_nullable
+as StatusFilter,selectedDate: freezed == selectedDate ? _self.selectedDate : selectedDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
+as String,selectedTypes: null == selectedTypes ? _self.selectedTypes : selectedTypes // ignore: cast_nullable_to_non_nullable
+as Set<String>,sortOption: null == sortOption ? _self.sortOption : sortOption // ignore: cast_nullable_to_non_nullable
+as SortOption,
   ));
 }
 
@@ -148,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateFilter dateFilter,  Set<String> selectedTypes)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( DateFilter dateFilter,  StatusFilter statusFilter,  DateTime? selectedDate,  String searchQuery,  Set<String> selectedTypes,  SortOption sortOption)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MemoFilterState() when $default != null:
-return $default(_that.dateFilter,_that.selectedTypes);case _:
+return $default(_that.dateFilter,_that.statusFilter,_that.selectedDate,_that.searchQuery,_that.selectedTypes,_that.sortOption);case _:
   return orElse();
 
 }
@@ -169,10 +174,10 @@ return $default(_that.dateFilter,_that.selectedTypes);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateFilter dateFilter,  Set<String> selectedTypes)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( DateFilter dateFilter,  StatusFilter statusFilter,  DateTime? selectedDate,  String searchQuery,  Set<String> selectedTypes,  SortOption sortOption)  $default,) {final _that = this;
 switch (_that) {
 case _MemoFilterState():
-return $default(_that.dateFilter,_that.selectedTypes);}
+return $default(_that.dateFilter,_that.statusFilter,_that.selectedDate,_that.searchQuery,_that.selectedTypes,_that.sortOption);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -186,10 +191,10 @@ return $default(_that.dateFilter,_that.selectedTypes);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateFilter dateFilter,  Set<String> selectedTypes)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( DateFilter dateFilter,  StatusFilter statusFilter,  DateTime? selectedDate,  String searchQuery,  Set<String> selectedTypes,  SortOption sortOption)?  $default,) {final _that = this;
 switch (_that) {
 case _MemoFilterState() when $default != null:
-return $default(_that.dateFilter,_that.selectedTypes);case _:
+return $default(_that.dateFilter,_that.statusFilter,_that.selectedDate,_that.searchQuery,_that.selectedTypes,_that.sortOption);case _:
   return null;
 
 }
@@ -201,10 +206,14 @@ return $default(_that.dateFilter,_that.selectedTypes);case _:
 
 
 class _MemoFilterState implements MemoFilterState {
-  const _MemoFilterState({this.dateFilter = DateFilter.all, final  Set<String> selectedTypes = const {}}): _selectedTypes = selectedTypes;
+  const _MemoFilterState({this.dateFilter = DateFilter.all, this.statusFilter = StatusFilter.all, this.selectedDate, this.searchQuery = '', final  Set<String> selectedTypes = const {}, this.sortOption = SortOption.dueDateNearest}): _selectedTypes = selectedTypes;
   
 
 @override@JsonKey() final  DateFilter dateFilter;
+@override@JsonKey() final  StatusFilter statusFilter;
+@override final  DateTime? selectedDate;
+// Custom date filter
+@override@JsonKey() final  String searchQuery;
  final  Set<String> _selectedTypes;
 @override@JsonKey() Set<String> get selectedTypes {
   if (_selectedTypes is EqualUnmodifiableSetView) return _selectedTypes;
@@ -212,6 +221,7 @@ class _MemoFilterState implements MemoFilterState {
   return EqualUnmodifiableSetView(_selectedTypes);
 }
 
+@override@JsonKey() final  SortOption sortOption;
 
 /// Create a copy of MemoFilterState
 /// with the given fields replaced by the non-null parameter values.
@@ -223,16 +233,16 @@ _$MemoFilterStateCopyWith<_MemoFilterState> get copyWith => __$MemoFilterStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MemoFilterState&&(identical(other.dateFilter, dateFilter) || other.dateFilter == dateFilter)&&const DeepCollectionEquality().equals(other._selectedTypes, _selectedTypes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MemoFilterState&&(identical(other.dateFilter, dateFilter) || other.dateFilter == dateFilter)&&(identical(other.statusFilter, statusFilter) || other.statusFilter == statusFilter)&&(identical(other.selectedDate, selectedDate) || other.selectedDate == selectedDate)&&(identical(other.searchQuery, searchQuery) || other.searchQuery == searchQuery)&&const DeepCollectionEquality().equals(other._selectedTypes, _selectedTypes)&&(identical(other.sortOption, sortOption) || other.sortOption == sortOption));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,dateFilter,const DeepCollectionEquality().hash(_selectedTypes));
+int get hashCode => Object.hash(runtimeType,dateFilter,statusFilter,selectedDate,searchQuery,const DeepCollectionEquality().hash(_selectedTypes),sortOption);
 
 @override
 String toString() {
-  return 'MemoFilterState(dateFilter: $dateFilter, selectedTypes: $selectedTypes)';
+  return 'MemoFilterState(dateFilter: $dateFilter, statusFilter: $statusFilter, selectedDate: $selectedDate, searchQuery: $searchQuery, selectedTypes: $selectedTypes, sortOption: $sortOption)';
 }
 
 
@@ -243,7 +253,7 @@ abstract mixin class _$MemoFilterStateCopyWith<$Res> implements $MemoFilterState
   factory _$MemoFilterStateCopyWith(_MemoFilterState value, $Res Function(_MemoFilterState) _then) = __$MemoFilterStateCopyWithImpl;
 @override @useResult
 $Res call({
- DateFilter dateFilter, Set<String> selectedTypes
+ DateFilter dateFilter, StatusFilter statusFilter, DateTime? selectedDate, String searchQuery, Set<String> selectedTypes, SortOption sortOption
 });
 
 
@@ -260,11 +270,15 @@ class __$MemoFilterStateCopyWithImpl<$Res>
 
 /// Create a copy of MemoFilterState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? dateFilter = null,Object? selectedTypes = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? dateFilter = null,Object? statusFilter = null,Object? selectedDate = freezed,Object? searchQuery = null,Object? selectedTypes = null,Object? sortOption = null,}) {
   return _then(_MemoFilterState(
 dateFilter: null == dateFilter ? _self.dateFilter : dateFilter // ignore: cast_nullable_to_non_nullable
-as DateFilter,selectedTypes: null == selectedTypes ? _self._selectedTypes : selectedTypes // ignore: cast_nullable_to_non_nullable
-as Set<String>,
+as DateFilter,statusFilter: null == statusFilter ? _self.statusFilter : statusFilter // ignore: cast_nullable_to_non_nullable
+as StatusFilter,selectedDate: freezed == selectedDate ? _self.selectedDate : selectedDate // ignore: cast_nullable_to_non_nullable
+as DateTime?,searchQuery: null == searchQuery ? _self.searchQuery : searchQuery // ignore: cast_nullable_to_non_nullable
+as String,selectedTypes: null == selectedTypes ? _self._selectedTypes : selectedTypes // ignore: cast_nullable_to_non_nullable
+as Set<String>,sortOption: null == sortOption ? _self.sortOption : sortOption // ignore: cast_nullable_to_non_nullable
+as SortOption,
   ));
 }
 

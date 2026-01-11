@@ -284,6 +284,12 @@ abstract class AppLocalizations {
   /// **'Enter a new task...'**
   String get addTaskHint;
 
+  /// No description provided for @dateUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Until {month}.{day}'**
+  String dateUntil(String month, String day);
+
   /// No description provided for @msgNoDatabaseSelected.
   ///
   /// In en, this message translates to:
@@ -535,6 +541,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to delete task: {error}'**
   String msgDeleteFailed(String error);
+
+  /// No description provided for @calendarToggleTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle Calendar'**
+  String get calendarToggleTooltip;
+
+  /// No description provided for @filterTodo.
+  ///
+  /// In en, this message translates to:
+  /// **'To Do'**
+  String get filterTodo;
+
+  /// No description provided for @filterDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get filterDone;
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Filters'**
+  String get clearFilters;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search...'**
+  String get searchHint;
+
+  /// No description provided for @sortByName.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by Name'**
+  String get sortByName;
+
+  /// No description provided for @sortByDueDateNearest.
+  ///
+  /// In en, this message translates to:
+  /// **'Due Date (Nearest)'**
+  String get sortByDueDateNearest;
+
+  /// No description provided for @sortByDueDateFarthest.
+  ///
+  /// In en, this message translates to:
+  /// **'Due Date (Farthest)'**
+  String get sortByDueDateFarthest;
 }
 
 class _AppLocalizationsDelegate

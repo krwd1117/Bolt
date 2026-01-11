@@ -49,31 +49,53 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
         _loading = false;
 
         // Auto-select based on type or name matches, or load saved
-        _titleProp = mapping['title'] ?? _findPropByType(props, 'title');
+        _titleProp =
+            mapping['title'] ??
+            _findBestMatch(props, ['title'], ['Name', 'Title', 'Topic']);
+
         _statusProp =
             mapping['status'] ??
-            _findPropByType(props, 'status') ??
-            _findPropByType(props, 'select');
-        _dateProp = mapping['date'] ?? _findPropByType(props, 'date');
-        _doneProp = mapping['done'] ?? _findPropByType(props, 'checkbox');
+            _findBestMatch(props, ['status', 'select'], ['Status', 'State']);
+
+        _dateProp =
+            mapping['date'] ??
+            _findBestMatch(props, ['date'], ['Date', 'Due Date', 'When']);
+
+        _doneProp =
+            mapping['done'] ??
+            _findBestMatch(props, ['checkbox'], ['Done', 'Completed', 'Check']);
+
         _typeProp =
             mapping['type'] ??
-            _findPropByName(props, 'Type') ??
-            _findPropByType(props, 'select');
+            _findBestMatch(
+              props,
+              ['select', 'multi_select'],
+              ['Type', 'Category', 'Tag'],
+            );
+
         _nameProp =
             mapping['name'] ??
-            _findPropByName(props, 'Name') ??
-            _findPropByType(props, 'rich_text');
+            _findBestMatch(
+              props,
+              ['rich_text', 'title'],
+              ['Name', 'Description', 'Subject'],
+            );
 
         _doneDateProp =
             mapping['done_date'] ??
-            _findPropByName(props, 'Done Date') ??
-            _findPropByName(props, 'Completed At'); // Heuristic
+            _findBestMatch(
+              props,
+              ['date', 'last_edited_time', 'created_time'],
+              ['Done Date', 'Completed At', 'Finished At'],
+            );
 
         _createdDateProp =
             mapping['created_date'] ??
-            _findPropByName(props, 'Created Date') ??
-            _findPropByType(props, 'created_time');
+            _findBestMatch(
+              props,
+              ['created_time', 'date'],
+              ['Created Time', 'Created At', 'Date Created'],
+            );
       });
     } catch (e) {
       if (mounted) {
@@ -93,15 +115,47 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
     }
   }
 
-  String? _findPropByType(Map<String, dynamic> props, String type) {
-    for (final entry in props.entries) {
-      if (entry.value['type'] == type) return entry.key;
+  String? _findBestMatch(
+    Map<String, dynamic> props,
+    List<String> preferredTypes,
+    List<String> preferredNames,
+  ) {
+    // 1. Exact Name + Type Match (Highest Priority)
+    for (final name in preferredNames) {
+      if (props.containsKey(name)) {
+        final type = props[name]['type'];
+        if (preferredTypes.contains(type)) {
+          return name;
+        }
+      }
     }
-    return null;
-  }
 
-  String? _findPropByName(Map<String, dynamic> props, String name) {
-    if (props.containsKey(name)) return name;
+    // 2. Exact Name Match (if type matches one of preferred, or if no strict type checking needed but passed types suggest intent)
+    // Actually, strict type compliance is often better. Let's look for Name match if type is acceptable.
+    for (final name in preferredNames) {
+      if (props.containsKey(name)) {
+        final type = props[name]['type'];
+        if (preferredTypes.contains(type)) {
+          return name;
+        }
+      }
+    }
+
+    // 3. Exact Type Match (Iterate properties and find first matching type)
+    // Preference order of types matters if multiple available.
+    for (final type in preferredTypes) {
+      for (final entry in props.entries) {
+        if (entry.value['type'] == type) {
+          // If we haven't matched by name, maybe this is it?
+          // Check if this property name is NOT in our preferred names of OTHER properties to avoid stealing?
+          // For simplicity, just return found type.
+          return entry.key;
+        }
+      }
+    }
+
+    // 4. (Optional) Fuzzy Name Match? Leaving out for now.
+
     return null;
   }
 
@@ -157,6 +211,7 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
                       _titleProp,
                       (val) => setState(() => _titleProp = val),
                       icon: Icons.title,
+                      allowedTypes: ['title'],
                     ),
                     _buildDropdownItem(
                       context,
@@ -165,6 +220,7 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
                       _statusProp,
                       (val) => setState(() => _statusProp = val),
                       icon: Icons.check_circle_outline,
+                      allowedTypes: ['select', 'status'],
                     ),
                     _buildDropdownItem(
                       context,
@@ -173,7 +229,9 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
                       _dateProp,
                       (val) => setState(() => _dateProp = val),
                       icon: Icons.calendar_today,
+                      allowedTypes: ['date'],
                     ),
+
                     _buildDropdownItem(
                       context,
                       l10n.propType,
@@ -181,6 +239,7 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
                       _typeProp,
                       (val) => setState(() => _typeProp = val),
                       icon: Icons.category,
+                      allowedTypes: ['select', 'multi_select'],
                     ),
                     _buildDropdownItem(
                       context,
@@ -189,6 +248,7 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
                       _nameProp,
                       (val) => setState(() => _nameProp = val),
                       icon: Icons.text_fields,
+                      allowedTypes: ['rich_text', 'title'],
                     ),
                   ]),
                   const SizedBox(height: 24),
@@ -204,6 +264,7 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
                       _doneProp,
                       (val) => setState(() => _doneProp = val),
                       icon: Icons.check_box,
+                      allowedTypes: ['checkbox'],
                     ),
                     _buildDropdownItem(
                       context,
@@ -212,6 +273,11 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
                       _doneDateProp,
                       (val) => setState(() => _doneDateProp = val),
                       icon: Icons.event_available,
+                      allowedTypes: [
+                        'date',
+                        'last_edited_time',
+                        'created_time',
+                      ],
                     ),
                     _buildDropdownItem(
                       context,
@@ -220,6 +286,7 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
                       _createdDateProp,
                       (val) => setState(() => _createdDateProp = val),
                       icon: Icons.access_time,
+                      allowedTypes: ['created_time', 'date'],
                     ),
                   ]),
                   const SizedBox(height: 32),
@@ -274,17 +341,28 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
     String? currentValue,
     ValueChanged<String?> onChanged, {
     required IconData icon,
+    List<String>? allowedTypes,
   }) {
-    final options = _properties!.keys.toList();
+    // Filter options based on allowedTypes
+    final options = _properties!.entries
+        .where(
+          (entry) =>
+              allowedTypes == null ||
+              allowedTypes.contains(entry.value['type']),
+        )
+        .map((entry) => entry.key)
+        .toList();
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
-      child: DropdownButtonFormField<String>(
+      child: InputDecorator(
         decoration: InputDecoration(
           labelText: label,
           prefixIcon: Icon(
             icon,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.5),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
@@ -297,23 +375,28 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
             vertical: 12,
           ),
         ),
-        dropdownColor: Theme.of(context).cardColor,
-        value: options.contains(currentValue) ? currentValue : null,
-        items: options.map((key) {
-          final type = _properties![key]['type'];
-          // Show icon based on type if fancy, or just text
-          return DropdownMenuItem(
-            value: key,
-            child: Text(
-              '$key ($type)',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-          );
-        }).toList(),
-        onChanged: onChanged,
-        icon: const Icon(Icons.arrow_drop_down_rounded),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            isExpanded: true,
+            dropdownColor: Theme.of(context).cardColor,
+            value: options.contains(currentValue) ? currentValue : null,
+            items: options.map((key) {
+              final type = _properties![key]['type'];
+              return DropdownMenuItem(
+                value: key,
+                child: Text(
+                  '$key ($type)',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              );
+            }).toList(),
+            onChanged: onChanged,
+            icon: const Icon(Icons.arrow_drop_down_rounded),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
       ),
     );
   }
@@ -327,6 +410,7 @@ class _PropertyMappingScreenState extends ConsumerState<PropertyMappingScreen> {
     if (_typeProp != null) mapping['type'] = _typeProp!;
     if (_nameProp != null) mapping['name'] = _nameProp!;
     if (_doneDateProp != null) mapping['done_date'] = _doneDateProp!;
+
     if (_createdDateProp != null) mapping['created_date'] = _createdDateProp!;
 
     await ref

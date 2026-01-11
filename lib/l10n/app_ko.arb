@@ -14,6 +14,7 @@
   "dateToday": "오늘",
   "dateTomorrow": "내일",
   "dateInDays": "{days}일 후",
+  "dateUntil": "{month}월 {day}일까지",
   "dateDaysAgo": "{days}일 전",
   "msgNoDatabaseSelected": "선택된 데이터베이스가 없습니다.",
   "btnCreateTask": "할 일 생성",
@@ -77,5 +78,13 @@
   "dialogDeleteTaskTitle": "할 일 삭제",
   "dialogDeleteTaskContent": "이 할 일을 삭제하시겠습니까?",
   "msgTaskDeleted": "할 일이 삭제되었습니다",
-  "msgDeleteFailed": "삭제 실패: {error}"
+  "msgDeleteFailed": "삭제 실패: {error}",
+  "calendarToggleTooltip": "달력 토글",
+  "filterTodo": "할 일",
+  "filterDone": "완료",
+  "clearFilters": "필터 초기화",
+  "searchHint": "검색...",
+  "sortByName": "이름순",
+  "sortByDueDateNearest": "마감일 가까운 순",
+  "sortByDueDateFarthest": "마감일 먼 순"
 }

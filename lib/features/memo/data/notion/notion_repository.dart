@@ -112,6 +112,14 @@ class NotionRepository {
     }
   }
 
+  Future<void> restorePage(String pageId) async {
+    try {
+      await _dio.patch('/pages/$pageId', data: {'archived': false});
+    } catch (e) {
+      throw Exception('Failed to restore page: $e');
+    }
+  }
+
   /// Query a database to retrieve pages.
   Future<List<Map<String, dynamic>>> queryDatabase(String databaseId) async {
     try {

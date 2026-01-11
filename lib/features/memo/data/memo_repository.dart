@@ -2,7 +2,7 @@ import 'package:bolt/features/memo/data/database/database.dart';
 import 'package:bolt/features/memo/data/database/tables.dart';
 import 'package:bolt/features/memo/domain/memo.dart';
 import 'package:drift/drift.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'memo_repository.g.dart';

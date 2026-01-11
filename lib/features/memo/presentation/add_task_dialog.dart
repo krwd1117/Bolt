@@ -206,16 +206,26 @@ class _AddTaskSheetState extends ConsumerState<AddTaskSheet> {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
-      child: DropdownButtonFormField<String>(
+      child: InputDecorator(
         decoration: InputDecoration(
           labelText: label,
           border: const OutlineInputBorder(),
         ),
-        value: groupValue,
-        items: options.map<DropdownMenuItem<String>>((opt) {
-          return DropdownMenuItem(value: opt['name'], child: Text(opt['name']));
-        }).toList(),
-        onChanged: onChanged,
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            value: groupValue,
+            isExpanded: true,
+            isDense: true,
+            items: options.map<DropdownMenuItem<String>>((opt) {
+              return DropdownMenuItem(
+                value: opt['name'],
+                child: Text(opt['name']),
+              );
+            }).toList(),
+            onChanged: onChanged,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
       ),
     );
   }
@@ -277,8 +287,9 @@ class _AddTaskSheetState extends ConsumerState<AddTaskSheet> {
       properties['Date'] = dateToSend.toIso8601String();
     }
     // Done logic removed
-    if (_nameController.text.isNotEmpty)
+    if (_nameController.text.isNotEmpty) {
       properties['Name'] = _nameController.text.trim();
+    }
 
     Navigator.pop(context); // Close dialog
 

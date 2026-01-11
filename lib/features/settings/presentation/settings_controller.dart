@@ -35,7 +35,7 @@ class SettingsController extends _$SettingsController {
     final prefs = await SharedPreferences.getInstance();
     for (final entry in mapping.entries) {
       await prefs.setString(
-        '${_propertyMappingPrefix}${dbId}_${entry.key}',
+        '$_propertyMappingPrefix${dbId}_${entry.key}',
         entry.value,
       );
     }
@@ -55,7 +55,7 @@ class SettingsController extends _$SettingsController {
       'created_date',
     ];
     for (final key in keys) {
-      final val = prefs.getString('${_propertyMappingPrefix}${dbId}_$key');
+      final val = prefs.getString('$_propertyMappingPrefix${dbId}_$key');
       if (val != null) {
         mapping[key] = val;
       }

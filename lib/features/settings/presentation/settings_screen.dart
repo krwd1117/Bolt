@@ -40,7 +40,7 @@ class SettingsScreen extends ConsumerWidget {
               child: Text(
                 '${l10n.labelVersion} 1.0.0',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.5),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                 ),
               ),
             ),
@@ -202,8 +202,8 @@ class SettingsScreen extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: (iconColor ?? theme.colorScheme.primary).withOpacity(
-                    0.1,
+                  color: (iconColor ?? theme.colorScheme.primary).withValues(
+                    alpha: 0.1,
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -244,7 +244,7 @@ class SettingsScreen extends ConsumerWidget {
               if (isEnabled && !isLabel)
                 Icon(
                   Icons.chevron_right_rounded,
-                  color: theme.colorScheme.onSurface.withOpacity(0.3),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                   size: 20,
                 ),
             ],
@@ -259,7 +259,7 @@ class SettingsScreen extends ConsumerWidget {
       height: 1,
       thickness: 1,
       indent: 56, // Align with text start
-      color: Theme.of(context).dividerColor.withOpacity(0.1),
+      color: Theme.of(context).dividerColor.withValues(alpha: 0.1),
     );
   }
 }

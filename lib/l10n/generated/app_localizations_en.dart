@@ -106,6 +106,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addTaskHint => 'Enter a new task...';
 
   @override
+  String dateUntil(String month, String day) {
+    return 'Until $month.$day';
+  }
+
+  @override
   String get msgNoDatabaseSelected => 'No database selected.';
 
   @override
@@ -242,4 +247,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String msgDeleteFailed(String error) {
     return 'Failed to delete task: $error';
   }
+
+  @override
+  String get calendarToggleTooltip => 'Toggle Calendar';
+
+  @override
+  String get filterTodo => 'To Do';
+
+  @override
+  String get filterDone => 'Done';
+
+  @override
+  String get clearFilters => 'Clear Filters';
+
+  @override
+  String get searchHint => 'Search...';
+
+  @override
+  String get sortByName => 'Sort by Name';
+
+  @override
+  String get sortByDueDateNearest => 'Due Date (Nearest)';
+
+  @override
+  String get sortByDueDateFarthest => 'Due Date (Farthest)';
 }

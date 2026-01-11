@@ -46,6 +46,17 @@
       }
     }
   },
+  "dateUntil": "Until {month}.{day}",
+  "@dateUntil": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      }
+    }
+  },
   "dateDaysAgo": "{days}d ago",
   "@dateDaysAgo": {
     "placeholders": {
@@ -132,5 +143,13 @@
         "type": "String"
       }
     }
-  }
+  },
+  "calendarToggleTooltip": "Toggle Calendar",
+  "filterTodo": "To Do",
+  "filterDone": "Done",
+  "clearFilters": "Clear Filters",
+  "searchHint": "Search...",
+  "sortByName": "Sort by Name",
+  "sortByDueDateNearest": "Due Date (Nearest)",
+  "sortByDueDateFarthest": "Due Date (Farthest)"
 }
