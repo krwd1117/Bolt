@@ -1,5 +1,4 @@
 import 'package:bolt/features/memo/presentation/memo_filter_controller.dart';
-import 'package:bolt/features/memo/presentation/memo_view_mode_controller.dart';
 import 'package:bolt/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -177,9 +176,6 @@ class _MemoFilterBarState extends ConsumerState<MemoFilterBar> {
                 setState(() {
                   _isSearchExpanded = false;
                 });
-                ref
-                    .read(memoViewModeControllerProvider.notifier)
-                    .setMode(MemoViewMode.list);
               },
               tooltip: l10n.clearFilters,
             ),
